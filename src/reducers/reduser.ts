@@ -1,9 +1,8 @@
 import React, { createContext, useReducer, useContext, ReactNode, Dispatch } from 'react';
 
-interface CardStateItem {
-    id:number,
+export interface CardStateItem {
+    id:string,
     title:string,
-    description:string;
     isDone:boolean
 }
 
@@ -15,9 +14,6 @@ const reducer = (state:CardStateItem[] = initialState, action) => {
     let newState: CardStateItem[] = [...state];
     switch (action.type) {
         case 'FROM_FILE':
-            newState = [...action.payload]
-            return newState;
-        case 'ADD':
             newState = [...action.payload]
             return newState;
         case 'ADD2':
@@ -54,12 +50,7 @@ export function actionCreator(payload: Array<CardStateItem>){
     return {type: "FROM_FILE", payload:[...payload]};
 }
 
-export function actionAdd(payload: CardStateItem[]){
-    return {type: "ADD", payload:[...payload]};
-}
-
 export function actionAdd2(payload: CardStateItem){
-    console.log(payload);
     return {type: "ADD2", payload:payload};
 }
 

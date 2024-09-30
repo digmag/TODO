@@ -2,54 +2,44 @@ import React,{ DragEventHandler, MouseEventHandler, useState } from "react";
 import { useDispatch } from "react-redux";
 import { editActionCreator } from "../reducers/reduser.ts";
 
-interface CardProps{
-    id:number;
+interface CardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "id">{
+    id:string;
     title:string;
-    description:string;
     isDone:boolean;
     className?:string;
     onClick?:MouseEventHandler;
-    onDrag?: DragEventHandler;
-    onDrop?:DragEventHandler;
     onDelete?: MouseEventHandler;
 }
 interface CardStateItem {
-    id:number;
+    id:string;
     title:string;
-    description:string;
     isDone:boolean;
 }
+
 const Card = (props:CardProps) => {
-    const handleDragOver = (e) => {
-        e.preventDefault();
-    }
     const [editMode, setMode] = useState<boolean>(false);
     const [newName, setNewName] = useState<string>(props.title);
-    const [newDesc, setnewDesc] = useState<string>(props.description);
     const dispatch = useDispatch();
     const saveChanges = () => {
         const newObj: CardStateItem = {
             id: props.id,
             title:newName,
-            description: newDesc,
             isDone: props.isDone
         }
         dispatch(editActionCreator(newObj));
     }
     return (
-        <div className={`card ${props.className} ${props.isDone?"done":""}`} onClick={props.onClick} draggable onDragStart={props.onDrag} onDrop={props.onDrop} onDragOver={handleDragOver}>
+        <div className={`card ${props.className} ${props.isDone?"done":""}`} onClick={props.onClick}>
             <div style={{display:"flex", flexDirection:"column"}}>
                 {editMode?
                 (
                     <>
                         <input defaultValue={props.title} onInput={(e) => setNewName(e.target.value)}/>
-                        <input defaultValue={props.description} onInput={(e) => setnewDesc(e.target.value)}/>
                     </>
                 ):
                 (
                     <>
                     <h3 className={"title"}>{props.title}</h3>
-                    <span className={"description"}>{props.description}</span>
                     </>
                 )}
             </div>
