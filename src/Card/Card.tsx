@@ -1,6 +1,6 @@
-import React,{ DragEventHandler, MouseEventHandler, useState } from "react";
+import React,{ MouseEventHandler, useState } from "react";
 import { useDispatch } from "react-redux";
-import { editActionCreator } from "../reducers/reduser.ts";
+import { changeName } from "../api/api.js";
 
 interface CardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "id">{
     id:string;
@@ -9,6 +9,7 @@ interface CardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "id">{
     className?:string;
     onClick?:MouseEventHandler;
     onDelete?: MouseEventHandler;
+    onDoneHandler?: MouseEventHandler
 }
 interface CardStateItem {
     id:string;
@@ -26,10 +27,10 @@ const Card = (props:CardProps) => {
             title:newName,
             isDone: props.isDone
         }
-        dispatch(editActionCreator(newObj));
+        dispatch(changeName(newObj));
     }
     return (
-        <div className={`card ${props.className} ${props.isDone?"done":""}`} onClick={props.onClick}>
+        <div className={`card ${props.className} ${props.isDone?"done":""}`}>
             <div style={{display:"flex", flexDirection:"column"}}>
                 {editMode?
                 (
@@ -46,6 +47,7 @@ const Card = (props:CardProps) => {
             <div>
                 <button className={`button-orange mr-1 ${editMode?"d-none":""}`} onClick={()=>{setMode(true)}}>Редактировать</button>
                 <button className={`button-green mr-1 ${editMode?"":"d-none"}`} onClick={()=>{setMode(false); saveChanges()}}>Сохранить</button>
+                <button className='button-orange mr-1' onClick={props.onClick}>{props.isDone?'Отменить выполнение' : 'Выполнить'}</button>
                 <button className="button-red" onClick={props.onDelete}>Удалить</button>
             </div>
         </div>

@@ -1,8 +1,8 @@
-import React, { useState, useReducer, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import Card from "../Card/Card.tsx";
-import { CardStateItem, deleteActionCreator, doneActionCreator } from "../reducers/reduser.ts";
+import { CardStateItem } from "../reducers/reduser.ts";
 import { useDispatch, useSelector } from "react-redux";
-import { createTask, deleteTask, getAllinList } from "../api/api.js";
+import { changeStatus, createTask, deleteTask, getAllinList } from "../api/api.js";
 
 const Main = () => {
     const state = useSelector((state: CardStateItem[]) => state);
@@ -10,7 +10,7 @@ const Main = () => {
     const dispatch = useDispatch();
     useEffect(()=> {
         dispatch(getAllinList());
-    },[dispatch])
+    },[])
     return (
         <>
         <div style={{display:"flex", alignItems:"center"}}>
@@ -25,7 +25,7 @@ const Main = () => {
                 key={el.id}
                 title={el.title}
                 onDelete={()=>dispatch(deleteTask(el.id))}
-                onClick={()=>dispatch(doneActionCreator(el.id))}
+                onClick={()=>dispatch(changeStatus(el.id))}
                 isDone={el.isDone}
                 />
             ))}

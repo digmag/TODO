@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import FileDownloader from "../common/fileDownloader.ts";
 import { useDispatch, useSelector } from "react-redux";
-import { actionCreator } from "../reducers/reduser.ts";
+import { actionCreator, CardStateItem } from "../reducers/reduser.ts";
+import { loadOnServer } from "../api/api.js";
 
 const Header = () => {
     const dispatch = useDispatch();
-    const state = useSelector((state:any) => state);
+    const state = useSelector((state:CardStateItem[]) => state);
     const [file,setFile] = useState<string | ArrayBuffer | null | undefined>(null);
     const [i, seti] = useState<string>("");
     const saveClick = () => {
@@ -28,13 +29,17 @@ const Header = () => {
     const load = () => {
         dispatch(actionCreator(JSON.parse(String(file))));
     }
+    const loadOnServer1 = () => {
+        dispatch(loadOnServer(state))
+    }
     
     return(
         <header className="header" style={{alignItems:"center"}}>
             <input className="mr-1" placeholder="Имя файла" onInput={inp}/>
             <button className="button-orange mr-1" onClick={saveClick}>Сохранить</button>
             <button className="button-green mr-1" onClick={load}>Открыть</button>
-            <input type='file' onChange={openClick}/>
+            <input className="mr-1" type='file' onChange={openClick}/>
+            <button className="button-green" onClick={loadOnServer1}>Загрузить список</button>
         </header>
     )
 }
